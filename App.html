@@ -1,194 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Flourish</title>
-  <style>
-    :root {
-      --bg: #0f0f12;
-      --card: #1a1a1f;
-      --text: #f0f0f0;
-      --muted: #888;
-      --accent: #a7f3d0;
-      --radius: 14px;
-      --shadow: 0 4px 12px rgba(0,0,0,0.3);
-      font-family: 'Segoe UI', sans-serif;
-    }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-    }
-    .app {
-      max-width: 420px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    h1 {
-      font-size: 24px;
-      margin: 0;
-    }
-    .toggle-group {
-      display: flex;
-      gap: 10px;
-    }
-    .toggle {
-      padding: 6px 10px;
-      background: var(--card);
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 12px;
-    }
-    .context {
-      background: var(--card);
-      padding: 10px;
-      border-radius: var(--radius);
-      margin-bottom: 14px;
-      font-size: 14px;
-      color: var(--muted);
-    }
-    .section {
-      margin-bottom: 18px;
-    }
-    .section h2 {
-      font-size: 16px;
-      margin-bottom: 8px;
-      color: var(--accent);
-    }
-    .card {
-      background: var(--card);
-      padding: 12px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .card .label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .card .icon {
-      font-size: 20px;
-    }
-    .card .status {
-      font-size: 14px;
-      color: var(--muted);
-    }
-    .btn {
-      background: #333;
-      color: var(--text);
-      border: none;
-      padding: 6px 10px;
-      border-radius: var(--radius);
-      cursor: pointer;
-    }
-    .nudge {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 10px;
-      text-align: center;
-    }
-    footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: var(--muted);
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolution Mood Board</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f3e7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #ffcc66;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 1s;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: #ffcccc;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: calc(30% - 40px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-  <div class="app">
     <header>
-      <h1>Flourish</h1>
-      <div class="toggle-group">
-        <div class="toggle" id="modeToggle">🐇 Rabbit</div>
-        <div class="toggle" id="capacityToggle">⚡ Low</div>
-      </div>
+        <h1>Resolution Mood Board</h1>
     </header>
-
-    <div class="context" id="contextCard">Busy morning — reminders adjusted.</div>
-
-    <div class="section">
-      <h2>Morning</h2>
-      <div class="card">
-        <div class="label"><div class="icon">🌼</div> <div>Medication</div></div>
-        <button class="btn" onclick="log('medication')">✔</button>
-      </div>
+    <div class="container">
+        <div class="card" data-category="Health">
+            <h2>Health</h2>
+            <p>Incorporate healthy habits!</p>
+            <button>Complete</button>
+            <button>Delete</button>
+        </div>
+        <div class="card" data-category="Career">
+            <h2>Career</h2>
+            <p>Aim for new career goals!</p>
+            <button>Complete</button>
+            <button>Delete</button>
+        </div>
+        <div class="card" data-category="Travel">
+            <h2>Travel</h2>
+            <p>Plan your next adventure!</p>
+            <button>Complete</button>
+            <button>Delete</button>
+        </div>
+        <div class="card" data-category="Creative">
+            <h2>Creative</h2>
+            <p>Explore new creative outlets!</p>
+            <button>Complete</button>
+            <button>Delete</button>
+        </div>
+        <!-- More cards as needed -->
     </div>
-
-    <div class="section">
-      <h2>Afternoon</h2>
-      <div class="card">
-        <div class="label"><div class="icon">💧</div> <div>Had some water</div></div>
-        <button class="btn" onclick="log('water')">✔</button>
-      </div>
-      <div class="card">
-        <div class="label"><div class="icon">🌺</div> <div>Focus session</div></div>
-        <button class="btn" onclick="log('focus')">✔</button>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Evening</h2>
-      <div class="card">
-        <div class="label"><div class="icon">🌸</div> <div>Go for a walk</div></div>
-        <button class="btn" onclick="log('walk')">✔</button>
-      </div>
-    </div>
-
-    <div class="nudge">Next: Water check in ~45 min 💧</div>
-
-    <footer>Dark mode prototype — data stored locally</footer>
-  </div>
-
-  <script>
-    const contextCard = document.getElementById('contextCard');
-    const modeToggle = document.getElementById('modeToggle');
-    const capacityToggle = document.getElementById('capacityToggle');
-
-    let mode = 'rabbit';
-    let lowCapacity = false;
-
-    modeToggle.addEventListener('click', () => {
-      mode = mode === 'rabbit' ? 'reflect' : 'rabbit';
-      modeToggle.textContent = mode === 'rabbit' ? '🐇 Rabbit' : '🌱 Reflect';
-      updateContext();
-    });
-
-    capacityToggle.addEventListener('click', () => {
-      lowCapacity = !lowCapacity;
-      capacityToggle.style.background = lowCapacity ? '#444' : '#1a1a1f';
-      updateContext();
-    });
-
-    function updateContext() {
-      if (lowCapacity) {
-        contextCard.textContent = 'Low-capacity day. Only essentials shown.';
-      } else {
-        contextCard.textContent = mode === 'rabbit'
-          ? 'Busy morning — reminders adjusted.'
-          : 'Reflective window — patterns available.';
-      }
-    }
-
-    function log(type) {
-      const now = new Date().toISOString();
-      const logs = JSON.parse(localStorage.getItem('flourish_logs') || '{}');
-      if (!logs[type]) logs[type] = [];
-      logs[type].push(now);
-      localStorage.setItem('flourish_logs', JSON.stringify(logs));
-      alert(`${type} logged.`);
-    }
-  </script>
+    <footer>
+        <p>&copy; 2026 by tsitsionono. All rights reserved.</p>
+    </footer>
 </body>
 </html>
