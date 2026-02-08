@@ -5,55 +5,249 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Flourish SPA</title>
   <style>
+    :root {
+      --bg: #0f0f12;
+      --card: #1a1a1f;
+      --text: #f0f0f0;
+      --muted: #888;
+      --accent: #a7f3d0;
+      --radius: 14px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.3);
+      font-family: 'Segoe UI', sans-serif;
+    }
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #0f0f12;
-      color: #f0f0f0;
+      background: var(--bg);
+      color: var(--text);
     }
     .tabs {
       display: flex;
       justify-content: space-around;
-      background: #1a1a1f;
-      padding: 10px 0;
+      background: var(--card);
       border-bottom: 1px solid #333;
     }
     .tab {
       flex: 1;
       text-align: center;
-      padding: 10px;
+      padding: 12px;
       cursor: pointer;
-      color: #a7f3d0;
+      color: var(--accent);
       font-weight: bold;
     }
     .tab.active {
       background: #2a2a2f;
     }
-    #content {
-      padding: 0;
+    .view {
+      display: none;
+      padding: 20px;
     }
-    iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
+    .view.active {
+      display: block;
+    }
+    .card, .section, .toggle, .btn, .task {
+      border-radius: var(--radius);
+    }
+    .card {
+      background: var(--card);
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .section h2, .card h2, .garden h3 {
+      color: var(--accent);
+    }
+    .petals {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .petal {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #444;
+    }
+    .petal.filled {
+      background: #ff6b6b;
+    }
+    .tasks {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+    .task {
+      background: #333;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .garden-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      padding-bottom: 10px;
+    }
+    .flower {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .flower::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      width: 4px;
+      height: 12px;
+      background: green;
+      border-radius: 2px;
+    }
+    .flower .petal-count {
+      font-size: 14px;
+      color: var(--accent);
+    }
+    footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="tabs">
-    <div class="tab active" onclick="loadTab('bloom.html', this)">Bloom</div>
-    <div class="tab" onclick="loadTab('garden.html', this)">Garden</div>
+    <div class="tab active" onclick="switchTab('bloom', this)">Bloom</div>
+    <div class="tab" onclick="switchTab('garden', this)">Garden</div>
   </div>
-  <div id="content">
-    <iframe id="tabFrame" src="bloom.html"></iframe>
+
+  <!-- Bloom View -->
+  <div id="bloom" class="view active">
+    <div class="app">
+      <header>
+        <h1>Flourish</h1>
+        <div class="toggle-group">
+          <div class="toggle" id="modeToggle">🐇 Rabbit</div>
+          <div class="toggle" id="capacityToggle">⚡ Low</div>
+        </div>
+      </header>
+      <div class="context" id="contextCard">Busy morning — reminders adjusted.</div>
+
+      <div class="section">
+        <h2>Morning</h2>
+        <div class="card">
+          <div class="label"><div class="icon">🌼</div> <div>Medication</div></div>
+          <button class="btn" onclick="log('medication')">✔</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Afternoon</h2>
+        <div class="card">
+          <div class="label"><div class="icon">💧</div> <div>Had some water</div></div>
+          <button class="btn" onclick="log('water')">✔</button>
+        </div>
+        <div class="card">
+          <div class="label"><div class="icon">🌺</div> <div>Focus session</div></div>
+          <button class="btn" onclick="log('focus')">✔</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Evening</h2>
+        <div class="card">
+          <div class="label"><div class="icon">🌸</div> <div>Go for a walk</div></div>
+          <button class="btn" onclick="log('walk')">✔</button>
+        </div>
+      </div>
+
+      <div class="nudge">Next: Water check in ~45 min 💧</div>
+      <footer>Dark mode prototype — data stored locally</footer>
+    </div>
+  </div>
+
+  <!-- Garden View -->
+  <div id="garden" class="view">
+    <div class="app">
+      <h1>Flourish</h1>
+      <div class="card">
+        <h2>Weekly Garden</h2>
+        <div class="petals" id="petalDisplay"></div>
+        <div class="tasks">
+          <div class="task" onclick="logTask('medication')">💊 Meds</div>
+          <div class="task" onclick="logTask('water')">💧 Water</div>
+          <div class="task" onclick="logTask('focus')">🌺 Focus</div>
+          <div class="task" onclick="logTask('movement')">🚶 Movement</div>
+        </div>
+        <p id="petalCountText" style="color: var(--muted); margin-top: 10px;"></p>
+      </div>
+
+      <div class="garden">
+        <h3>Garden</h3>
+        <div class="garden-scroll" id="gardenScroll"></div>
+      </div>
+    </div>
   </div>
 
   <script>
-    function loadTab(page, el) {
-      document.getElementById('tabFrame').src = page;
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    // Tab switching
+    function switchTab(id, el) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       el.classList.add('active');
     }
-  </script>
-</body>
-</html>
+
+    // Bloom logic
+    const contextCard = document.getElementById('contextCard');
+    const modeToggle = document.getElementById('modeToggle');
+    const capacityToggle = document.getElementById('capacityToggle');
+    let mode = 'rabbit';
+    let lowCapacity = false;
+
+    if (modeToggle) {
+      modeToggle.addEventListener('click', () => {
+        mode = mode === 'rabbit' ? 'reflect' : 'rabbit';
+        modeToggle.textContent = mode === 'rabbit' ? '🐇 Rabbit' : '🌱 Reflect';
+        updateContext();
+      });
+    }
+
+    if (capacityToggle) {
+      capacityToggle.addEventListener('click', () => {
+        lowCapacity = !lowCapacity;
+        capacityToggle.style.background = lowCapacity ? '#444' : '#1a1a1f';
+        updateContext();
+      });
+    }
+
+    function updateContext() {
+      if (contextCard) {
+        contextCard.textContent = lowCapacity
+          ? 'Low-capacity day. Only essentials shown.'
+          : mode === 'rabbit'
+            ? 'Busy morning — reminders adjusted.'
+            : 'Reflective window — patterns available.';
+      }
+    }
+
+    function log(type) {
+      const now = new Date().toISOString();
+      const logs = JSON.parse(localStorage.getItem('flourish_logs') || '{}');
+      if (!logs[type]) logs[type] = [];
+      logs[type].push(now);
+      localStorage.setItem('flourish_logs', JSON.stringify(logs));
+      alert(`${type} logged.`);
+    }
+
+    // Garden logic
+    const petalDisplay = document.getElementById('petalDisplay');
+    const petalCountText = document.getElementById('petalCountText');
+    const gardenScroll = document.getElementById('gardenScroll');
+
+    const today = new Date();
+    const weekKey = `week_${today.getFullYear
