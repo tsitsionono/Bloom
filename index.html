@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPA with Tabs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            border-bottom: 1px solid #ccc;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #f3f3f3;
+            outline: none;
+            transition: background-color 0.3s;
+        }
+        .tab.active {
+            background-color: #ddd;
+            font-weight: bold;
+        }
+        .content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tab-container">
+    <button class="tab active" onclick="loadFragment('App.html', this)">App</button>
+    <button class="tab" onclick="loadFragment('Garden.html', this)">Garden</button>
+</div>
+
+<div class="content" id="content">
+    <!-- Content will be loaded here -->
+</div>
+
+<script>
+    function loadFragment(file, tab) {
+        // Highlight the active tab
+        document.querySelectorAll('.tab').forEach(button => button.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Load the content
+        fetch(file)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(html => {
+                document.getElementById('content').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading fragment:', error);
+                document.getElementById('content').innerHTML = '<p>Could not load content.</p>'
+            });
+    }
+
+    // Load default tab content on initial load
+    loadFragment('App.html', document.querySelector('.tab.active'));
+</script>
+
+</body>
+</html>
